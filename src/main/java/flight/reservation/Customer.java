@@ -1,14 +1,16 @@
 package flight.reservation;
 
 import flight.reservation.flight.ScheduledFlight;
+import flight.reservation.flight.FlightObserver;
 import flight.reservation.order.FlightOrder;
 import flight.reservation.order.Order;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
 import java.util.stream.Collectors;
 
-public class Customer {
+public class Customer implements FlightObserver {
 
     private String email;
     private String name;
@@ -74,6 +76,20 @@ public class Customer {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    @Override
+    public void updateDepartureTime(Date newDepartureTime) {
+        System.out.println("Dear " + name + ", the departure time of one of your flights has been updated to: "
+                + newDepartureTime);
+    }
+    
+    public void registerForFlightUpdates(ScheduledFlight flight) {
+        flight.addObserver(this);
+    }
+
+    public void unregisterForFlightUpdates(ScheduledFlight flight) {
+        flight.removeObserver(this);
     }
 
 }
