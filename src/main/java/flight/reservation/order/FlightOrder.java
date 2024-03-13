@@ -2,12 +2,9 @@ package flight.reservation.order;
 
 import flight.reservation.Customer;
 import flight.reservation.flight.ScheduledFlight;
-import flight.reservation.order.PaymentStrategy;
-import flight.reservation.order.CreditCardPaymentStrategy;
-import flight.reservation.order.PayPalPaymentStrategy;
+import flight.reservation.payment.PaymentStrategy;
 
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 public class FlightOrder extends Order {

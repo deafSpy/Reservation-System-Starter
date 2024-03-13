@@ -1,9 +1,10 @@
-package flight.reservation.flight;
-
-import flight.reservation.itinerary.FlightItineraryBuilder;
+package flight.reservation.itinerary;
 
 import java.util.Date;
 import java.util.List;
+
+import flight.reservation.flight.Flight;
+import flight.reservation.flight.ScheduledFlight;
 
 public class ItineraryDirector {
     public List<ScheduledFlight> buildOneWayItinerary(Flight flight, Date date) {
@@ -31,3 +32,4 @@ public class ItineraryDirector {
         return builder.build();
     }
 }
+

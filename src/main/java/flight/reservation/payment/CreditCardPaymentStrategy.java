@@ -1,5 +1,4 @@
-package flight.reservation.order;
-import flight.reservation.payment.CreditCard;
+package flight.reservation.payment;
 
 public class CreditCardPaymentStrategy implements PaymentStrategy {
     private final CreditCard creditCard;
@@ -24,3 +23,4 @@ public class CreditCardPaymentStrategy implements PaymentStrategy {
         }
     }
 }
+

@@ -4,6 +4,9 @@ import flight.reservation.flight.ScheduledFlight;
 import flight.reservation.flight.FlightObserver;
 import flight.reservation.order.FlightOrder;
 import flight.reservation.order.Order;
+import flight.reservation.validator.CapacityValidator;
+import flight.reservation.validator.NoFlyListValidator;
+import flight.reservation.validator.OrderValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +14,13 @@ import java.util.Date;
 import java.util.stream.Collectors;
 
 public class Customer implements FlightObserver {
-
+    
     private String email;
     private String name;
     private List<Order> orders;
+    private static Customer instance;
+    
+    private OrderValidator orderValidatorChain;
 
     public Customer(String name, String email) {
         this.name = name;
@@ -23,9 +29,15 @@ public class Customer implements FlightObserver {
     }
 
     public FlightOrder createOrder(List<String> passengerNames, List<ScheduledFlight> flights, double price) {
-        if (!isOrderValid(passengerNames, flights)) {
+        if (orderValidatorChain == null) {
+            throw new IllegalStateException("Order validation chain is not initialized.");
+        }
+
+        if (!orderValidatorChain.validateOrder(passengerNames, flights)) {
             throw new IllegalStateException("Order is not valid");
         }
+
+        // Proceed with order creation
         FlightOrder order = new FlightOrder(flights);
         order.setCustomer(this);
         order.setPrice(price);
@@ -38,22 +50,7 @@ public class Customer implements FlightObserver {
         orders.add(order);
         return order;
     }
-
-    private boolean isOrderValid(List<String> passengerNames, List<ScheduledFlight> flights) {
-        boolean valid = true;
-        valid = valid && !FlightOrder.getNoFlyList().contains(this.getName());
-        valid = valid && passengerNames.stream().noneMatch(passenger -> FlightOrder.getNoFlyList().contains(passenger));
-        valid = valid && flights.stream().allMatch(scheduledFlight -> {
-            try {
-                return scheduledFlight.getAvailableCapacity() >= passengerNames.size();
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-                return false;
-            }
-        });
-        return valid;
-    }
-
+    
     public String getEmail() {
         return email;
     }
@@ -92,4 +89,17 @@ public class Customer implements FlightObserver {
         flight.removeObserver(this);
     }
 
+    public static Customer getInstance() {
+        if (instance == null) {
+            instance = new Customer("Anonymous", "anonymous@example.com");
+        }
+        return instance;
+    }
+
+    public void setOrderValidatorChain(OrderValidator orderValidatorChain) {
+        this.orderValidatorChain = orderValidatorChain;
+    }
+
+
 }
+

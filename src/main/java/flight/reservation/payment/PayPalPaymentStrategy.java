@@ -1,5 +1,4 @@
-package flight.reservation.order;
-import flight.reservation.payment.Paypal;
+package flight.reservation.payment;
 
 public class PayPalPaymentStrategy implements PaymentStrategy {
     private final String email;
