@@ -1,6 +1,6 @@
 package flight.reservation.itinerary;
 
-import flight.reservation.flight.Flight;
+// import flight.reservation.flight.Flight;
 import flight.reservation.flight.ScheduledFlight;
 
 import java.util.ArrayList;
